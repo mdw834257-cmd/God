@@ -1,0 +1,201 @@
+name: God Mode APK Builder
+
+on:
+  repository_dispatch:
+    types: [build_apk]
+
+jobs:
+  build:
+    name: Build Ultra-Secure APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install Dependencies
+        run: |
+          npm install -g cordova
+          npm install -g cordova-res
+          npm install javascript-obfuscator
+
+      - name: Initialize App
+        run: |
+          cordova create myApp ${{ github.event.client_payload.package_name }} "${{ github.event.client_payload.app_name }}"
+          cd myApp
+          cordova platform add android
+
+      # --- FETCH SOURCE (UNIQUE USER PATH FIX) ---
+      - name: Fetch Source
+        run: |
+          # Payload se unique path uthayenge (User ID wala)
+          SOURCE_FILE="${{ github.event.client_payload.source_path }}"
+          
+          if [ -f "$SOURCE_FILE" ]; then
+            echo "✅ Source file found at: $SOURCE_FILE"
+            cp "$SOURCE_FILE" myApp/www/index.html
+          else
+            echo "❌ Error: Source file missing at $SOURCE_FILE"
+            ls -R apk_source
+            exit 1
+          fi
+
+      # --- 💀 DARK CYBER GOD MODE ENCRYPTION (100x EXTREME) 💀 ---
+      - name: 🛡️ Apply Dark Cyber Protection
+        working-directory: ./myApp
+        run: |
+          echo "🔒 Applying HELLO KIDS DARK CYBER Protection..."
+          
+          cat << 'EOF' > encrypt_engine.js
+          const fs = require('fs');
+          const JavaScriptObfuscator = require('javascript-obfuscator');
+          
+          const sourcePath = 'www/index.html';
+          
+          try {
+              let originalCode = fs.readFileSync(sourcePath, 'utf8');
+              
+              // 1. Triple Layer Encryption (Base64 -> Hex -> Base64)
+              const b64 = Buffer.from(originalCode).toString('base64');
+              const hex = Buffer.from(b64).toString('hex');
+              const finalEnc = Buffer.from(hex).toString('base64');
+              
+              // 2. The Trap Loader Script with Signature
+              let loaderScript = `
+                  (function(_0xInput){
+                      console.log("HELLO KIDS 🌚 DARK CYBER 🥶🖕"); // Signature
+                      
+                      // Anti-Debug Loop (Browser Crash)
+                      setInterval(function(){
+                          var _0xStart = new Date().getTime();
+                          debugger; 
+                          if (new Date().getTime() - _0xStart > 100) {
+                              while(true){}; // Hang the browser
+                          }
+                      }, 500);
+                      
+                      // Decryption Logic
+                      var _0xHex = window.atob(_0xInput);
+                      var _0xBase = _0xHex.match(/.{1,2}/g).map(function(v){return String.fromCharCode(parseInt(v, 16))}).join('');
+                      var _0xHtml = decodeURIComponent(escape(window.atob(_0xBase)));
+                      
+                      document.open();
+                      document.write(_0xHtml);
+                      document.close();
+                  })("${finalEnc}");
+              `;
+              
+              console.log("🔥 Code converted to Ultra-String. Applying 100x Obfuscation...");
+              
+              // 3. EXTREME OBFUSCATION SETTINGS
+              const obfuscationResult = JavaScriptObfuscator.obfuscate(loaderScript, {
+                  // --- BASIC ---
+                  compact: true,
+                  simplify: true,
+                  
+                  // --- DARK CYBER BRANDING ---
+                  identifierNamesGenerator: 'mangled', 
+                  identifiersPrefix: 'HELLO_KIDS_DARK_CYBER', // Har variable ke aage ye lagega
+                  renameGlobals: true,
+                  
+                  // --- STRING PROTECTION (Bahut lamba code banega) ---
+                  stringArray: true,
+                  stringArrayEncoding: ['rc4'],
+                  stringArrayThreshold: 1, 
+                  stringArrayIndexShift: true,
+                  stringArrayWrappersCount: 5, 
+                  stringArrayWrappersChainedCalls: true,     
+                  stringArrayWrappersParametersMaxCount: 5,
+                  
+                  // --- SPLITTING (Har 1 letter tod dega) ---
+                  splitStrings: true,
+                  splitStringsChunkLength: 1, 
+                  
+                  // --- LOGIC SCREWING ---
+                  controlFlowFlattening: true,
+                  controlFlowFlatteningThreshold: 1,
+                  numbersToExpressions: true,
+                  
+                  // --- TRAPS ---
+                  selfDefending: true, 
+                  deadCodeInjection: true,
+                  deadCodeInjectionThreshold: 1, 
+                  
+                  // --- ANTI-DEBUG ---
+                  debugProtection: true,
+                  debugProtectionInterval: 2000,
+                  disableConsoleOutput: true, 
+                  transformObjectKeys: true,
+                  unicodeEscapeSequence: true
+              });
+              
+              const finalHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body><script>${obfuscationResult.getObfuscatedCode()}</script></body></html>`;
+              
+              fs.writeFileSync(sourcePath, finalHtml);
+              console.log("✅ DARK CYBER Protection Applied!");
+          } catch (err) {
+              console.error("Encryption Failed:", err);
+              process.exit(1);
+          }
+          EOF
+          
+          node encrypt_engine.js
+
+      # --- INJECT CONFIG (UNIQUE ICON FIX) ---
+      - name: Inject Config
+        working-directory: ./myApp
+        run: |
+          if [ "${{ github.event.client_payload.permissions.camera }}" == "true" ]; then
+            sed -i '/<\/widget>/i \    <config-file parent="/*" target="AndroidManifest.xml"><uses-permission android:name="android.permission.CAMERA" /></config-file>' config.xml
+          fi
+          if [ "${{ github.event.client_payload.permissions.mic }}" == "true" ];
+          then
+             sed -i '/<\/widget>/i \    <config-file parent="/*" target="AndroidManifest.xml"><uses-permission android:name="android.permission.RECORD_AUDIO" /></config-file>' config.xml
+          fi
+          if [ "${{ github.event.client_payload.permissions.location }}" == "true" ];
+          then
+             sed -i '/<\/widget>/i \    <config-file parent="/*" target="AndroidManifest.xml"><uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /></config-file>' config.xml
+          fi
+
+          # ✅ NEW ICON LOGIC (Uses Unique User Path)
+          if [ "${{ github.event.client_payload.has_custom_icon }}" == "true" ];
+          then
+             ICON_FILE="../${{ github.event.client_payload.icon_path }}"
+             echo "✅ Custom Icon found at: $ICON_FILE"
+             
+             if [ -f "$ICON_FILE" ]; then
+                 cp "$ICON_FILE" www/icon.png
+                 sed -i '/<\/widget>/i \    <icon src="www/icon.png" />' config.xml
+             else
+                 echo "⚠️ Icon file reported but not found on disk."
+             fi
+          fi
+
+      # --- INJECT PERMISSIONS SCRIPT ---
+      - name: Inject Permissions Handler
+        working-directory: ./myApp
+        run: |
+          cordova plugin add cordova-plugin-android-permissions
+          PERM_SCRIPT="<script>document.addEventListener('deviceready',function(){try{var p=cordova.plugins.permissions;var list=[];if(${{ github.event.client_payload.permissions.camera }})list.push(p.CAMERA);if(${{ github.event.client_payload.permissions.mic }})list.push(p.RECORD_AUDIO);if(${{ github.event.client_payload.permissions.location }})list.push(p.ACCESS_FINE_LOCATION);if(list.length>0){p.requestPermissions(list,function(s){},function(e){});}}catch(e){}},false);</script>"
+          sed -i "s|<body>|<body>$PERM_SCRIPT|g" www/index.html
+
+      # --- BUILD ---
+      - name: Build Android APK
+        working-directory: ./myApp
+        run: cordova build android --debug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.client_payload.app_name }}-APK
+          path: myApp/platforms/android/app/build/outputs/apk/debug/app-debug.apk
