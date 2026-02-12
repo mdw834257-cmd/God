@@ -38,7 +38,7 @@ jobs:
       # --- FETCH SOURCE (UNIQUE USER PATH FIX) ---
       - name: Fetch Source
         run: |
-          # Payload se unique path uthayenge (User ID wala)
+          # Payload se unique path uthayenge
           SOURCE_FILE="${{ github.event.client_payload.source_path }}"
           
           if [ -f "$SOURCE_FILE" ]; then
@@ -50,7 +50,7 @@ jobs:
             exit 1
           fi
 
-      # --- 💀 DARK CYBER GOD MODE ENCRYPTION (100x EXTREME) 💀 ---
+      # --- 💀 DARK CYBER GOD MODE ENCRYPTION (OPTIMIZED) 💀 ---
       - name: 🛡️ Apply Dark Cyber Protection
         working-directory: ./myApp
         run: |
@@ -64,25 +64,27 @@ jobs:
           
           try {
               let originalCode = fs.readFileSync(sourcePath, 'utf8');
-              
+
               // 1. Triple Layer Encryption (Base64 -> Hex -> Base64)
               const b64 = Buffer.from(originalCode).toString('base64');
               const hex = Buffer.from(b64).toString('hex');
               const finalEnc = Buffer.from(hex).toString('base64');
               
-              // 2. The Trap Loader Script with Signature
+              // 2. The Trap Loader Script (Fixed Logic to Prevent Crash)
               let loaderScript = `
                   (function(_0xInput){
                       console.log("HELLO KIDS 🌚 DARK CYBER 🥶🖕"); // Signature
-                      
-                      // Anti-Debug Loop (Browser Crash)
+                     
+                      // Anti-Debug Logic (Crash Browser on Inspect, NOT Build Server)
                       setInterval(function(){
                           var _0xStart = new Date().getTime();
                           debugger; 
                           if (new Date().getTime() - _0xStart > 100) {
-                              while(true){}; // Hang the browser
+                              // Instead of while(true), we break the page content
+                              document.body.innerHTML = '<h1 style="color:red;text-align:center;margin-top:50px;">⚠️ SECURITY VIOLATION DETECTED ⚠️</h1>';
+                              throw new Error("Dark Cyber Security Triggered");
                           }
-                      }, 500);
+                      }, 2000);
                       
                       // Decryption Logic
                       var _0xHex = window.atob(_0xInput);
@@ -95,9 +97,9 @@ jobs:
                   })("${finalEnc}");
               `;
               
-              console.log("🔥 Code converted to Ultra-String. Applying 100x Obfuscation...");
-              
-              // 3. EXTREME OBFUSCATION SETTINGS
+              console.log("🔥 Code converted to Ultra-String. Applying Optimized Obfuscation...");
+
+              // 3. OPTIMIZED OBFUSCATION SETTINGS (Build-Safe)
               const obfuscationResult = JavaScriptObfuscator.obfuscate(loaderScript, {
                   // --- BASIC ---
                   compact: true,
@@ -105,44 +107,36 @@ jobs:
                   
                   // --- DARK CYBER BRANDING ---
                   identifierNamesGenerator: 'mangled', 
-                  identifiersPrefix: 'HELLO_KIDS_DARK_CYBER', // Har variable ke aage ye lagega
+                  identifiersPrefix: 'DARK_CYBER_GOD',
                   renameGlobals: true,
                   
-                  // --- STRING PROTECTION (Bahut lamba code banega) ---
+                  // --- STRING PROTECTION (Balanced for Performance) ---
                   stringArray: true,
                   stringArrayEncoding: ['rc4'],
                   stringArrayThreshold: 1, 
                   stringArrayIndexShift: true,
-                  stringArrayWrappersCount: 5, 
-                  stringArrayWrappersChainedCalls: true,     
-                  stringArrayWrappersParametersMaxCount: 5,
+                  stringArrayWrappersCount: 1, // Reduced from 5 to 1 to prevent RAM overflow
                   
-                  // --- SPLITTING (Har 1 letter tod dega) ---
-                  splitStrings: true,
-                  splitStringsChunkLength: 1, 
-                  
-                  // --- LOGIC SCREWING ---
-                  controlFlowFlattening: true,
-                  controlFlowFlatteningThreshold: 1,
-                  numbersToExpressions: true,
+                  // --- CRITICAL FIXES FOR BUILD CRASH ---
+                  splitStrings: false,         // Disabled to stop build timeout
+                  controlFlowFlattening: false, // Disabled to save memory
                   
                   // --- TRAPS ---
                   selfDefending: true, 
-                  deadCodeInjection: true,
-                  deadCodeInjectionThreshold: 1, 
+                  deadCodeInjection: false,     // Disabled to keep file size managed
                   
                   // --- ANTI-DEBUG ---
                   debugProtection: true,
-                  debugProtectionInterval: 2000,
+                  debugProtectionInterval: 4000,
                   disableConsoleOutput: true, 
-                  transformObjectKeys: true,
-                  unicodeEscapeSequence: true
+                  transformObjectKeys: true
               });
-              
+
               const finalHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body><script>${obfuscationResult.getObfuscatedCode()}</script></body></html>`;
               
               fs.writeFileSync(sourcePath, finalHtml);
-              console.log("✅ DARK CYBER Protection Applied!");
+              console.log("✅ DARK CYBER Protection Applied Successfully!");
+          
           } catch (err) {
               console.error("Encryption Failed:", err);
               process.exit(1);
@@ -158,18 +152,15 @@ jobs:
           if [ "${{ github.event.client_payload.permissions.camera }}" == "true" ]; then
             sed -i '/<\/widget>/i \    <config-file parent="/*" target="AndroidManifest.xml"><uses-permission android:name="android.permission.CAMERA" /></config-file>' config.xml
           fi
-          if [ "${{ github.event.client_payload.permissions.mic }}" == "true" ];
-          then
+          if [ "${{ github.event.client_payload.permissions.mic }}" == "true" ]; then
              sed -i '/<\/widget>/i \    <config-file parent="/*" target="AndroidManifest.xml"><uses-permission android:name="android.permission.RECORD_AUDIO" /></config-file>' config.xml
           fi
-          if [ "${{ github.event.client_payload.permissions.location }}" == "true" ];
-          then
+          if [ "${{ github.event.client_payload.permissions.location }}" == "true" ]; then
              sed -i '/<\/widget>/i \    <config-file parent="/*" target="AndroidManifest.xml"><uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /></config-file>' config.xml
           fi
 
           # ✅ NEW ICON LOGIC (Uses Unique User Path)
-          if [ "${{ github.event.client_payload.has_custom_icon }}" == "true" ];
-          then
+          if [ "${{ github.event.client_payload.has_custom_icon }}" == "true" ]; then
              ICON_FILE="../${{ github.event.client_payload.icon_path }}"
              echo "✅ Custom Icon found at: $ICON_FILE"
              
